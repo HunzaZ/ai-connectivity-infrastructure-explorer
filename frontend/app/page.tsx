@@ -4,7 +4,24 @@ import { useState } from "react";
 import InfrastructureMap from "@/components/InfrastructureMap";
 
 export default function Home() {
+  const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+
+  const analyzeNetwork = () => {
+    if (question.toLowerCase().includes("tokyo")) {
+      setAnswer(
+        "Traffic to Tokyo is routed through trans-Pacific fiber infrastructure. Estimated latency is 110–140 ms."
+      );
+    } else if (question.toLowerCase().includes("london")) {
+      setAnswer(
+        "London serves as a major European interconnect with multiple Tier-1 carriers."
+      );
+    } else {
+      setAnswer(
+        "Infrastructure analysis completed. Multiple cloud regions and backbone routes are available."
+      );
+    }
+  };
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
@@ -19,14 +36,12 @@ export default function Home() {
       </header>
 
       <div className="grid grid-cols-12 gap-4 p-4">
-
         <aside className="col-span-2 rounded-xl bg-slate-900 p-4">
           <h2 className="mb-4 font-semibold">
             Infrastructure Layers
           </h2>
 
           <div className="space-y-3 text-sm">
-
             <label className="block">
               <input type="checkbox" defaultChecked />
               <span className="ml-2">Data Centers</span>
@@ -46,7 +61,6 @@ export default function Home() {
               <input type="checkbox" defaultChecked />
               <span className="ml-2">Cell Towers</span>
             </label>
-
           </div>
         </aside>
 
@@ -55,7 +69,6 @@ export default function Home() {
         </section>
 
         <aside className="col-span-3 rounded-xl bg-slate-900 p-4">
-
           <h2 className="mb-4 font-semibold">
             AI Assistant
           </h2>
@@ -65,13 +78,18 @@ export default function Home() {
             cloud regions, or infrastructure.
           </div>
 
-          <button
-            className="mt-4 w-full rounded bg-blue-600 p-2"
-            onClick={() =>
-              setAnswer(
-                "Traffic between San Francisco and Tokyo traverses trans-Pacific fiber routes. Estimated latency is primarily driven by physical distance, routing hops, and backbone congestion."
-              )
+          <input
+            value={question}
+            onChange={(e) =>
+              setQuestion(e.target.value)
             }
+            placeholder="Why is latency high between SF and Tokyo?"
+            className="mt-4 w-full rounded bg-slate-800 p-2"
+          />
+
+          <button
+            className="mt-3 w-full rounded bg-blue-600 p-2"
+            onClick={analyzeNetwork}
           >
             Analyze Network
           </button>
@@ -82,11 +100,9 @@ export default function Home() {
             </div>
           )}
         </aside>
-
       </div>
 
       <div className="grid grid-cols-4 gap-4 px-4 pb-4">
-
         <MetricCard
           title="Data Centers"
           value="7,842"
@@ -106,7 +122,6 @@ export default function Home() {
           title="Connected Sites"
           value="84,513"
         />
-
       </div>
     </main>
   );

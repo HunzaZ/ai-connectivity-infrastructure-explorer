@@ -12,115 +12,48 @@ export default function InfrastructureMap() {
 
     const map = new maplibregl.Map({
       container: mapContainer.current,
-      style:
-        "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-      center: [0, 20],
+      style: "https://demotiles.maplibre.org/style.json",
+      center: [20, 20],
       zoom: 1.5,
     });
 
     const locations = [
       {
         name: "AWS us-west-1",
-        coords: [-122.4194, 37.7749],
+        coords: [-122.4194, 37.7749] as [number, number],
       },
       {
         name: "AWS us-east-1",
-        coords: [-77.4874, 39.0438],
+        coords: [-77.4874, 39.0438] as [number, number],
       },
       {
         name: "Azure London",
-        coords: [-0.1276, 51.5074],
+        coords: [-0.1276, 51.5074] as [number, number],
       },
       {
         name: "Google Tokyo",
-        coords: [139.6917, 35.6895],
+        coords: [139.6917, 35.6895] as [number, number],
       },
       {
         name: "Meta Singapore",
-        coords: [103.8198, 1.3521],
+        coords: [103.8198, 1.3521] as [number, number],
       },
       {
         name: "Azure Sydney",
-        coords: [151.2093, -33.8688],
+        coords: [151.2093, -33.8688] as [number, number],
       },
       {
         name: "AWS Frankfurt",
-        coords: [8.6821, 50.1109],
+        coords: [8.6821, 50.1109] as [number, number],
       },
     ];
 
     map.on("load", () => {
-      const routes = {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            geometry: {
-              type: "LineString",
-              coordinates: [
-                [-122.4194, 37.7749],
-                [-77.4874, 39.0438],
-              ],
-            },
-            properties: {},
-          },
-          {
-            type: "Feature",
-            geometry: {
-              type: "LineString",
-              coordinates: [
-                [-77.4874, 39.0438],
-                [-0.1276, 51.5074],
-              ],
-            },
-            properties: {},
-          },
-          {
-            type: "Feature",
-            geometry: {
-              type: "LineString",
-              coordinates: [
-                [-0.1276, 51.5074],
-                [139.6917, 35.6895],
-              ],
-            },
-            properties: {},
-          },
-          {
-            type: "Feature",
-            geometry: {
-              type: "LineString",
-              coordinates: [
-                [139.6917, 35.6895],
-                [103.8198, 1.3521],
-              ],
-            },
-            properties: {},
-          },
-        ],
-      };
-
-      map.addSource("fiber-routes", {
-        type: "geojson",
-        data: routes as any,
-      });
-
-      map.addLayer({
-        id: "fiber-routes",
-        type: "line",
-        source: "fiber-routes",
-        paint: {
-          "line-color": "#8b5cf6",
-          "line-width": 3,
-          "line-opacity": 0.9,
-        },
-      });
-
       locations.forEach((location) => {
         new maplibregl.Marker({
           color: "#22c55e",
         })
-          .setLngLat(location.coords as [number, number])
+          .setLngLat(location.coords)
           .setPopup(
             new maplibregl.Popup().setHTML(
               `<strong>${location.name}</strong>`
@@ -130,13 +63,15 @@ export default function InfrastructureMap() {
       });
     });
 
-    return () => map.remove();
+    return () => {
+      map.remove();
+    };
   }, []);
 
   return (
     <div
       ref={mapContainer}
-      className="h-[600px] w-full overflow-hidden rounded-lg"
+      className="h-[600px] w-full rounded-lg"
     />
   );
 }
