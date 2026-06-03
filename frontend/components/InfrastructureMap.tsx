@@ -20,29 +20,37 @@ export default function InfrastructureMap() {
 
     const locations = [
       {
-        name: "San Francisco Data Center",
-        coords: [-122.4194, 37.7749] as [number, number],
+        name: "AWS us-west-1",
+        coords: [-122.4194, 37.7749],
       },
       {
-        name: "New York Data Center",
-        coords: [-74.006, 40.7128] as [number, number],
+        name: "AWS us-east-1",
+        coords: [-77.4874, 39.0438],
       },
       {
-        name: "London Cloud Region",
-        coords: [-0.1276, 51.5074] as [number, number],
+        name: "Azure London",
+        coords: [-0.1276, 51.5074],
       },
       {
-        name: "Tokyo Cloud Region",
-        coords: [139.6917, 35.6895] as [number, number],
+        name: "Google Tokyo",
+        coords: [139.6917, 35.6895],
       },
       {
-        name: "Singapore Cloud Region",
-        coords: [103.8198, 1.3521] as [number, number],
+        name: "Meta Singapore",
+        coords: [103.8198, 1.3521],
+      },
+      {
+        name: "Azure Sydney",
+        coords: [151.2093, -33.8688],
+      },
+      {
+        name: "AWS Frankfurt",
+        coords: [8.6821, 50.1109],
       },
     ];
 
     map.on("load", () => {
-      const fiberRoutes = {
+      const routes = {
         type: "FeatureCollection",
         features: [
           {
@@ -51,7 +59,7 @@ export default function InfrastructureMap() {
               type: "LineString",
               coordinates: [
                 [-122.4194, 37.7749],
-                [-74.006, 40.7128],
+                [-77.4874, 39.0438],
               ],
             },
             properties: {},
@@ -61,7 +69,7 @@ export default function InfrastructureMap() {
             geometry: {
               type: "LineString",
               coordinates: [
-                [-74.006, 40.7128],
+                [-77.4874, 39.0438],
                 [-0.1276, 51.5074],
               ],
             },
@@ -94,7 +102,7 @@ export default function InfrastructureMap() {
 
       map.addSource("fiber-routes", {
         type: "geojson",
-        data: fiberRoutes as any,
+        data: routes as any,
       });
 
       map.addLayer({
@@ -109,19 +117,16 @@ export default function InfrastructureMap() {
       });
 
       locations.forEach((location) => {
-        const marker = new maplibregl.Marker({
+        new maplibregl.Marker({
           color: "#22c55e",
         })
-          .setLngLat(location.coords)
+          .setLngLat(location.coords as [number, number])
           .setPopup(
-            new maplibregl.Popup().setHTML(`
-              <div style="padding:4px">
-                <strong>${location.name}</strong>
-              </div>
-            `)
-          );
-
-        marker.addTo(map);
+            new maplibregl.Popup().setHTML(
+              `<strong>${location.name}</strong>`
+            )
+          )
+          .addTo(map);
       });
     });
 
@@ -131,7 +136,7 @@ export default function InfrastructureMap() {
   return (
     <div
       ref={mapContainer}
-      className="h-[600px] w-full rounded-lg overflow-hidden"
+      className="h-[600px] w-full overflow-hidden rounded-lg"
     />
   );
 }
